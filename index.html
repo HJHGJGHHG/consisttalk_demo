@@ -100,80 +100,19 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Title</h1>
+          <h1 class="title is-1 publication-title">ConsistTalk: Intensity Controllable Temporal Consistent Talking Head Generation with Diffusion Noise Search</h1>
 
           <div class="is-size-3 publication-authors">
             <span class="author-block"> </span>
             <span class="author-block"> 
               <h2 class="subtitle has-text-centered" style="font-size: 2.4rem; color: #29d4d2">
-              ACM MM 2025 Anonymous Submission #xxx </span>
+              ACM MM 2025 Submission #6540 </span>
             </h2>
           </div>
 
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- first row -->
-<section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <!-- <div id="results-carousel" class="carousel results-carousel"> -->
-      <div id="results-small" class="carousel results-small">
-        <div class="item">
-          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5556">
-            <!-- <div class="desc">AnimateDiff+FreeInit</div> -->
-            <!-- <div class="twentytwenty-container" data-orientation="horizontal"> -->
-              <img src="./assets/gifs/3-1.gif" width="100%" />
-              <img src="./assets/gifs/3-2.gif" width="100%" />
-            <!-- </div> -->
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5556">
-            <!-- <div class="desc">ModelScope+FreeInit</div> -->
-            <!-- <div class="twentytwenty-container" data-orientation="horizontal"> -->
-              <img src="./assets/gifs/9-1.gif" width="100%" />
-              <img src="./assets/gifs/9-2.gif" width="100%" />
-            <!-- </div> -->
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5556">
-            <!-- <div class="desc">ModelScope+FreeInit</div> -->
-            <!-- <div class="twentytwenty-container" data-orientation="horizontal"> -->
-              <img src="./assets/gifs/10-1.gif" width="100%" />
-              <img src="./assets/gifs/10-2.gif" width="100%" />
-            <!-- </div> -->
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5556">
-            <!-- <div class="desc">AnimateDiff+FreeInit</div> -->
-            <!-- <div class="twentytwenty-container" data-orientation="horizontal"> -->
-              <img src="./assets/gifs/6-1.gif" width="100%" />
-              <img src="./assets/gifs/6-2.gif" width="100%" />
-            <!-- </div> -->
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5556">
-            <!-- <div class="desc">AnimateDiff+FreeInit</div> -->
-            <!-- <div class="twentytwenty-container" data-orientation="horizontal"> -->
-              <img src="./assets/gifs/7-1.gif" width="100%" />
-              <img src="./assets/gifs/7-2.gif" width="100%" />
-            <!-- </div> -->
-          </div>
-        </div>
-
-      </div>
-  </div>
   </div>
 </section>
 
@@ -186,7 +125,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Abstract.
+            The emergence of diffusion-based video generation has recently led to significant advancements in audio-driven portrait image animation. However, due to the insufficient decoupling of motion and identity information, current methods exhibit significant limitations in background stabilization and flicker mitigation. In addition, existing approaches lack joint modeling of audio and portrait motion, and control of motion intensity is either inflexible or results in severe temporal inconsistencies. To address these problems, we propose <b>ConsistTalk</b>, a diffusion-based approach specialized in improving the visual consistency in generating talking heads with controllable intensity. Specifically, we introduce <b>an optical flow-guided temporal module (OFT)</b> that incorporates facial optical flow and a 3D full-attention-based model to enhance temporal consistency. Second, we present an <b>Audio-to-Intensity (A2I) model</b> obtained through multimodal teacher-student knowledge distillation. The A2I model converts audio and facial velocity features into a frame-wise intensity sequence, representing the overall strength of head and expression movements. Finally, we introduce <b>a plug-and-play, training-free noise initialization strategy (IC-Init)</b> that leverages inference-time noise searching based on frequency decomposition, with the stop frequency adaptively parameterized by the acquired intensity sequence. These methods enable ConsistTalk to generate temporal consistent talking head videos with the ability to adjust portrait movement diversity by manipulating the acquired intensity scores. Extensive experiments indicate that ConsistTalk outperforms recent models, demonstrates the ability to maintain background stabilization and mitigate flicker, and provides more lifelike and high-quality results.
           </p>
         </div>
       </div>
@@ -201,6 +140,33 @@
       <div class="section-title">
         <h2 class="title is-3">I. Showcases</h2>
       </div>
+      <div id="results-ModelScope" class="carousel results-carousel">
+        <div class="item item-compare1">
+          <div class="section-title">
+            <h4 class="title is-5">Showcases</h4>
+          </div>
+          <div class="iframe-container-four">
+            <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/dcyrp9?" width="512" style="border:none;"></iframe>
+            <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/ia3zvq?" width="512" style="border:none;"></iframe>
+            <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/1dzo86?" width="512" style="border:none;"></iframe>
+            <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/ufni2l?" width="512" style="border:none;"></iframe>
+         </div>
+        </div>
+        
+        <div class="item item-compare2">
+          <div class="section-title">
+            <h4 class="title is-5">Different Portrait Styles & Audio Types</h4>
+          </div>
+          <div class="iframe-container-four">
+            <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/6jt5n2?" width="512" style="border:none;"></iframe>
+            <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/pn9gk0?" width="512" style="border:none;"></iframe>
+            <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/nc28cv?" width="512" style="border:none;"></iframe>
+            <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/dcyrp9?" width="512" style="border:none;"></iframe>
+         </div>
+        </div>
+        </div>
+      </div>
+    
   </div>
 </section>
 
@@ -212,35 +178,24 @@
         <h2 class="title is-3">II. Comparison With Current Methods</h2>
       </div>
     <h3 class="title is-4">Qualitative Evaluation</h3>
-    <div id="results-carousel" class="carousel results-carousel">
-      <div class="item item-compare1">
+    We observe that existing diffusion model–based methods exhibit varying degrees of instability, including incorrect shadows, background flickering, and motion blurring. In contrast, our proposed framework incorporates facial optical flows and the A2I model, enhancing the relationship of audio and portrait motion while employing the IC-Init noise search strategy. This enables our method to generate temporal stable videos with vivid expressions and natural movements.
+    <div id="results-ModelScope" class="carousel results-carousel">
         <div class="iframe-container-one">
-          <iframe allow="fullscreen" allowfullscreen height="720" src="https://streamable.com/e/x5mt7x?" width="1280" style="border:none;"></iframe>
-        </div>
+          <iframe allow="fullscreen" allowfullscreen height="720" src="https://streamable.com/e/11rswr?" width="1280" style="border:none;"></iframe>
+       </div>
+
+       <div class="iframe-container-one">
+        <iframe allow="fullscreen" allowfullscreen height="720" src="https://streamable.com/e/3rvq7w?" width="1280" style="border:none;"></iframe>
+     </div>
+
       </div>
-      <div class="item item-compare2">
-        <div class="iframe-container-one">
-          <iframe allow="fullscreen" allowfullscreen height="720" src="https://streamable.com/e/hlkmor?loop=0" width="1280" style="border:none;"></iframe>
-        </div>
-      </div>
-    </div>
-    xxx.
 
     <br><br>
     <h3 class="title is-4">Quantitative Evaluation</h3>
     <div class="columns is-vcentered interpolation-panel">
       <div class="column has-text-centered">
         <img src="./assets/img/Quantitative_Evaluation.png">
-        <p>xxx.</p>
-      </div>
-    </div>
-
-    <br><br>
-    <h3 class="title is-4">User Study</h3>
-    <div class="columns is-vcentered interpolation-panel">
-      <div class="column has-text-centered">
-        <img src="./assets/img/user_study.png" width="55%">
-        <p>xxx.</p>
+        <p>Our method demonstrates significant improvements in temporal consistency, background stability, and identity preservation. Furthermore, it outperforms other diffusion model-based approaches in motion diversity evaluation. We notably excel in consistency-related metrics, 38.7% lower than the recent state-of-the-art model Sonic in the Flicker metric. These enhancements stem from our innovative OFT module and IC-Init strategy. In terms of audio-lip synchronization and visual quality, our method performs on par with the previously top-performing techniques.</p>
       </div>
     </div>
 
@@ -255,32 +210,93 @@
         <h2 class="title is-3">III. Ablation Studies</h2>
       </div>
     
-    <h3 class="title is-4">Part1. Analysis of Key Components.</h3>
-    <div class="columns is-vcentered interpolation-panel">
-      <div class="column has-text-centered">
-        <img src="./assets/img/ablation.png" width="55%">
-        <p>xxx.</p>
-      </div>
-    </div>
-
-    <h3 class="title is-4">Visualization Results</h3>
-    <div id="results-carousel" class="carousel results-carousel">
+    <h3 class="title is-4">Part1. Effectiveness of Optical Flow Guided Temporal Module.</h3>
+    OFT effectively mitigates flickering and enhances temporal consistency.
+    <div id="results-ModelScope" class="carousel results-carousel">
       <div class="item item-compare1">
-        <div class="iframe-container-one">
-          <iframe allow="fullscreen" allowfullscreen height="720" src="https://streamable.com/e/p8al3n?" width="1280" style="border:none;"></iframe>
+        <div class="section-title">
+          <h4 class="title is-5">(Left) Full Model  (Right) w/o OFT (using ReferenceNet)</h4>
+        </div>
+        <div class="iframe-container">
+          <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/dqpq41?" width="512" style="border:none;"></iframe>
+          <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/ruzof2?" width="512" style="border:none;"></iframe>
         </div>
       </div>
       <div class="item item-compare2">
-        <div class="iframe-container-one">
-          <iframe allow="fullscreen" allowfullscreen height="720" src="https://streamable.com/e/p8al3n?" width="1280" style="border:none;"></iframe>
+        <div class="section-title">
+          <h4 class="title is-5">(Left) Full Model  (Right) w/o OFT (using ReferenceNet)</h4>
+        </div>
+        <div class="iframe-container">
+          <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/dcyrp9?" width="512" style="border:none;"></iframe>
+          <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/4spqg5?" width="512" style="border:none;"></iframe>
         </div>
       </div>
     </div>
-    xxx.
 
     <p>&nbsp;&nbsp;&nbsp;</p>
     <h3 class="title is-4">Part2. Effectiveness of IC-Init.</h3>
+    IC-Init can be applied to other diffusion-based talking head generation methods as a plug-and-play noise initialization strategy. Below are some comparisons between vanilla Hallo and Hallo using IC-Init.
+  </div>
+</section>
 
+<!-- first row -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <!-- <div id="results-carousel" class="carousel results-carousel"> -->
+      <div id="results-small" class="carousel results-small">
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5556">
+            <!-- <div class="desc">AnimateDiff+FreeInit</div> -->
+            <!-- <div class="twentytwenty-container" data-orientation="horizontal"> -->
+              <img src="./assets/gifs/hallo_base1.gif" width="100%" />
+              <img src="./assets/gifs/hallo_icinit1.gif" width="100%" />
+            <!-- </div> -->
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5556">
+            <!-- <div class="desc">ModelScope+FreeInit</div> -->
+            <!-- <div class="twentytwenty-container" data-orientation="horizontal"> -->
+              <img src="./assets/gifs/hallo_base2.gif" width="100%" />
+              <img src="./assets/gifs/hallo_icinit2.gif" width="100%" />
+            <!-- </div> -->
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5556">
+            <!-- <div class="desc">ModelScope+FreeInit</div> -->
+            <!-- <div class="twentytwenty-container" data-orientation="horizontal"> -->
+              <img src="./assets/gifs/hallo_base3.gif" width="100%" />
+              <img src="./assets/gifs/hallo_icinit3.gif" width="100%" />
+            <!-- </div> -->
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5556">
+            <!-- <div class="desc">ModelScope+FreeInit</div> -->
+            <!-- <div class="twentytwenty-container" data-orientation="horizontal"> -->
+              <img src="./assets/gifs/hallo_base4.gif" width="100%" />
+              <img src="./assets/gifs/hallo_icinit4.gif" width="100%" />
+            <!-- </div> -->
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.5556">
+            <!-- <div class="desc">ModelScope+FreeInit</div> -->
+            <!-- <div class="twentytwenty-container" data-orientation="horizontal"> -->
+              <img src="./assets/gifs/hallo_base5.gif" width="100%" />
+              <img src="./assets/gifs/hallo_icinit5.gif" width="100%" />
+            <!-- </div> -->
+          </div>
+        </div>
+
+      </div>
+  </div>
   </div>
 </section>
 
