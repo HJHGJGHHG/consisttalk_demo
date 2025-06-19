@@ -63,6 +63,17 @@
   font-style: italic;
 }
 </style>
+  <script src="./static/js/template.v2.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+  <script src="https://rawgit.com/nstrayer/slid3r/master/dist/slid3r.js"></script>
+  <script src="cross_fade.js"></script>
+  <link rel="stylesheet" href="./static/css/style.css">
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
         rel="stylesheet">
@@ -134,6 +145,49 @@
   </div>
 </section>
 
+<section class="section hero is-light">
+  <div class="container is-max-desktop is-centered">
+    <h2 class="title is-3 has-text-centered" >Methodology</h2>
+    <h4 class="title is-5">Optical Flow Guided Temporal Module</h4>
+    <div style="column-count: 2;">
+<p>In this paper, we adopt a decoupling strategy: identity (ID) features are encoded by ReferenceNet only once, while motion information is dynamically constructed by estimating facial optical flow between adjacent frames. The core idea is to decouple motion dynamics from identity information in the generated frames, thus ensuring that the model relies primarily on the reference image for appearance features and utilizes preceding frames to capture temporal movement features. To enhance temporal consistency, we employ the Full-Attention mechanism with 3D RoPE, which has demonstrated superior performance compared to divided spatiotemporal (2D+1D) attention. Refer to the figure on the right for a visualization of the proposed OFT module. FA and LN represent the full-attention and the layernorm mechanism, respectively.
+</p>
+<br>
+<div class="center-container has-text-centered"><img src="./assets/img/oft.png" style="zoom:100%;" /></div>
+</div>
+<br>
+
+<h4 class="title is-5">Motion Intensity Sequence Modeling</h4>
+<p>Unlike existing methods (Sonic, Hallo, Loopy), a specific intensity value sequence can be obtained, and multimodal information fusion is explicitly performed instead of modal dropout during training in Loopy. As shown in the figure below, we propose an audio-to-intensity (A2I) module based on teacher-student learning. The teacher model leverages multimodal cross attention and a variant of the gated linear unit to capture the relationships between driven audio and the portrait movement-related features. Then, we employ a knowledge distillation approach to train a student model that predicts the intensity sequence solely from audio input. Specifically, we minimize the mean squared error (MSE) loss between the cross-attention logits of the last \(l\) layers of the teacher and student models.
+</p>
+<br>
+<div class="center-container has-text-centered"><img src="./assets/img/a2i.png" style="zoom:50%;" /></div>
+<br><br>
+
+<h4 class="title is-5">Intensity Guided Diffusion Noise Search</h4>
+<div style="column-count: 2;">
+<p>ConsistI2V introduces noise initialization from the low-frequency band of the first frame based on the key observation that the high-frequency component captures the fast-moving parts and fine details in the video, whereas the low-frequency component corresponds to the large-scale layout. Inspired by this, we first conduct frequency decomposition and construct rewards based on the reference image and preceding frames. In addition, the acquired intensity values are employed to adjust stop frequency and reward coefficients adaptively. Under high-intensity conditions, the system increases high-frequency reward coefficients to enhance motion dynamics. Conversely, under low-intensity scenarios, a larger low-frequency reward coefficient is utilized to reinforce background stability and ID preservation. 
+<br>
+
+As shown on the right, the IC-Init algorithm begins by taking the reference latent \(z_{\mathrm{ref}}\) and injecting gaussian noise for \(\tau\) diffusion steps via \(z_{\mathrm{ref},\tau} = \mathrm{add\_noise}(z_{\mathrm{ref}}, \tau)\), which is used in reward computing (Line 1). Next, the initial beam set \(B_0=\{z^s_0\}_{s=1}^B\) of size \(B\) is created (Line 2). The algorithm then iterates for each frame index \(l = 1\) to \(L\), resetting a temporary <b>budget</b> and new beam set \(B_l\) at each step (Line 3 and 4). For every previous-beam latents \(z_{l-1}^s\in B_{l-1}\), it again adds \(\tau\) steps noise to obtain \(z^s_{l-1,\tau} = \mathrm{add\_noise}(z^s_{l-1},\tau)\), then
+</p>
+<br>
+<div class="center-container has-text-centered"><img src="./assets/img/icinit.png" style="zoom:100%;" /></div>
+</div>
+<p>
+samples \(K\) candidates \(z^{s,k}_{l, T}\sim\mathcal{N}(\boldsymbol 0,\boldsymbol I)\) for \(k=1,\dots,K\); each \(z^{s,k}_{l, T}\) undergoes a short reverse diffusion of \(T'\) steps to produce <b>lookahead</b> latents \(z_{l, T-T'}^{s,k} = \mathrm{de\_noise}(z^{s,k}_{l, T},\epsilon_\theta,T')\), and the pair \((z_{l,T-T'}^{s,k},z^s_{l-1,\tau})\) is added to the budget. After expanding all \(B\times K\) candidates, the algorithm scores each by the reward function  
+\[
+R(z_l,z_{\mathrm{ref},\tau},z_{l-1,\tau},y_l)
+=\lambda_{\mathrm{low}}(y_l)\langle z_l^{\mathrm{low}},z_{\mathrm{ref},\tau}^{\mathrm{low}}\rangle
+-\lambda_{\mathrm{high}}(y_l)\langle z_l^{\mathrm{high}},z_{l-1,\tau}^{\mathrm{high}}\rangle
+\]  
+
+We select the top \(B\) candidate pairs by the reward function \(R(\cdot)\), then fully denoise them to form the new beam set \(B_{l}\). After processing all \(L\) steps, we have beam sets \(B_1,\dots,B_L\). The final trajectory \(\{\boldsymbol{z}'_l\}_{l=1}^L\) is the one maximizing the cumulative reward across all time steps, thus achieving a balance between reference consistency and motion diversity in a beam-search procedure.
+</p>
+
+  </div>
+</section>
+
 <section class="section">
   <div class="container is-max-desktop">
 
@@ -178,27 +232,33 @@
         <h2 class="title is-3">II. Comparison With Current Methods</h2>
       </div>
     <h3 class="title is-4">Qualitative Evaluation</h3>
-    We observe that existing diffusion model–based methods exhibit varying degrees of instability, including incorrect shadows, background flickering, and motion blurring. In contrast, our proposed framework incorporates facial optical flows and the A2I model, enhancing the relationship of audio and portrait motion while employing the IC-Init noise search strategy. This enables our method to generate temporal stable videos with vivid expressions and natural movements.
+    <h4 class="title is-5">1. In-Domain Comparison</h4>
+    <p>We observe that existing diffusion model–based methods exhibit varying degrees of instability, including incorrect shadows, background flickering, and motion blurring. In contrast, our proposed framework incorporates facial optical flows and the A2I model, enhancing the relationship of audio and portrait motion while employing the IC-Init noise search strategy. This enables our method to generate temporal stable videos with vivid expressions and natural movements.</p>
+    
     <div id="results-ModelScope" class="carousel results-carousel">
         <div class="iframe-container-one">
-          <iframe allow="fullscreen" allowfullscreen height="720" src="https://streamable.com/e/11rswr?" width="1280" style="border:none;"></iframe>
+          <iframe allow="fullscreen" allowfullscreen height="720" src="https://streamable.com/e/544d82?" width="1280" style="border:none;"></iframe>
        </div>
 
        <div class="iframe-container-one">
-        <iframe allow="fullscreen" allowfullscreen height="720" src="https://streamable.com/e/3rvq7w?" width="1280" style="border:none;"></iframe>
+        <iframe allow="fullscreen" allowfullscreen height="720" src="https://streamable.com/e/immc1p?" width="1280" style="border:none;"></iframe>
      </div>
 
-      </div>
+    </div>
+    <h4 class="title is-5">2. Long Video Generation</h4>
+    <p>We have provided a qualitative comparison below, showcasing generated videos of up to 5 minutes in length. We observe that baseline models (Hallov1&2) tend to introduce cumulative errors over long generations, leading to inconsistent backgrounds, jittering, or flickering. In contrast, our method can generate more temporally stable videos. Our improved performance in long-sequence generation primarily stems from the intensity-guided noise initialization (IC-Init) and the motion feature decomposition, which explicitly separates head dynamics from facial expression flow. Unlike existing approaches that suffer from temporal shifting or background flicker, our method ensures high-frequency expression fidelity without sacrificing background stability.</p>
+    <div class="iframe-container-one">
+        <iframe allow="fullscreen" allowfullscreen height="768" src="https://streamable.com/e/kt2mom?" width="2048" style="border:none;"></iframe>
+     </div>
 
     <br><br>
     <h3 class="title is-4">Quantitative Evaluation</h3>
-    <div class="columns is-vcentered interpolation-panel">
-      <div class="column has-text-centered">
-        <img src="./assets/img/Quantitative_Evaluation.png">
-        <p>Our method demonstrates significant improvements in temporal consistency, background stability, and identity preservation. Furthermore, it outperforms other diffusion model-based approaches in motion diversity evaluation. We notably excel in consistency-related metrics, 38.7% lower than the recent state-of-the-art model Sonic in the Flicker metric. These enhancements stem from our innovative OFT module and IC-Init strategy. In terms of audio-lip synchronization and visual quality, our method performs on par with the previously top-performing techniques.</p>
-      </div>
-    </div>
-
+      <d-figure>
+    <figure>
+    <img src="./assets/img/Quantitative_Evaluation.png" style="display: block; margin-left: auto; margin-right: auto; width: 100%;" alt="fig:self_supervised_verifier">
+    <figcaption>Our method demonstrates significant improvements in temporal consistency, background stability, and identity preservation. Furthermore, it outperforms other diffusion model-based approaches in motion diversity evaluation. We notably excel in consistency-related metrics, 38.7% lower than the recent state-of-the-art model Sonic in the Flicker metric. These enhancements stem from our innovative OFT module and IC-Init strategy. In terms of audio-lip synchronization and visual quality, our method performs on par with the previously top-performing techniques.
+     </figure>
+  </d-figure>
   </div>
 </section>
 
@@ -215,27 +275,58 @@
     <div id="results-ModelScope" class="carousel results-carousel">
       <div class="item item-compare1">
         <div class="section-title">
-          <h4 class="title is-5">(Left) Full Model  (Right) w/o OFT (using ReferenceNet)</h4>
         </div>
-        <div class="iframe-container">
-          <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/dqpq41?" width="512" style="border:none;"></iframe>
-          <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/ruzof2?" width="512" style="border:none;"></iframe>
+        <div class="iframe-container-one">
+          <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/t8byto?" width="1024" style="border:none;"></iframe>
         </div>
       </div>
       <div class="item item-compare2">
         <div class="section-title">
-          <h4 class="title is-5">(Left) Full Model  (Right) w/o OFT (using ReferenceNet)</h4>
         </div>
-        <div class="iframe-container">
-          <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/dcyrp9?" width="512" style="border:none;"></iframe>
-          <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/4spqg5?" width="512" style="border:none;"></iframe>
+        <div class="iframe-container-one">
+          <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/7d70ev?" width="1024" style="border:none;"></iframe>
         </div>
       </div>
     </div>
 
     <p>&nbsp;&nbsp;&nbsp;</p>
-    <h3 class="title is-4">Part2. Effectiveness of IC-Init.</h3>
-    IC-Init can be applied to other diffusion-based talking head generation methods as a plug-and-play noise initialization strategy. Below are some comparisons between vanilla Hallo and Hallo using IC-Init.
+    <h3 class="title is-4">Part2. Ablations on the Audio-to-Intensity Module.</h3>
+    <h4 class="title is-5">1. Analysis of the intensity score manipulation</h4>
+    <p>The intensity sequence is obtained from the multimodal teacher-student learning, representing the overall strength of speech prosody and visual dynamics. Then, the intensity value is provided to the denoising UNet model by multiplying it with the hidden states of the audio-conditioned layer. This design allows for explicit control over the motion diversity of the synthesized video by manipulating the intensity scores. We have investigated how intensity adjustments affect different areas, as demonstrated below.</p>
+    <p>&nbsp;&nbsp;&nbsp;</p>
+  <d-figure>
+    <figure>
+    <img src="./assets/img/a2i_ablation.png" style="display: block; margin-left: auto; margin-right: auto; width: 100%;" alt="fig:self_supervised_verifier">
+    <figcaption>As intensity scores increase from 0.25 to 3.0, both head motion velocity (left axis) and facial motion velocity (right axis) increase smoothly with higher intensity scores, confirming that our model can effectively modulate motion amplitude and thereby enhance movement diversity. In the combined plot on the right, we report two metrics as the intensity scale varies. The SyncNet-C metric peaks around the medium intensity range (1.0–1.5) at 10.268, then slightly declines to 10.116 at higher scales, indicating that excessively large motions can introduce minor audio-lip sync drift. And the FVD metric achieves its lowest score (214.6) at an intensity of 1.0, then gradually worsens as intensity increases, suggesting that overly strong head/facial movements may lead to background drift or flicker, thus degrading overall video quality.
+     </figure>
+  </d-figure>
+  <div class="iframe-container-one">
+        <iframe allow="fullscreen" allowfullscreen height="384" src="https://streamable.com/e/oxtl7e?" width="1280" style="border:none;"></iframe>
+     </div>
+
+    <p>&nbsp;&nbsp;&nbsp;</p>
+    <h4 class="title is-5">2. Robustness of the A2I intensity predictor</h4>
+    <p>We have published several style-diverse audio-intensity curves below, including Mandarin and singing examples. While domain shifting will degrade precision, the output generally remains largely usable due to temporal smoothing and velocity-aligned constraints.</p>
+        <div id="results-ModelScope" class="carousel results-carousel">
+      <div class="item item-compare1">
+        <div class="section-title">
+        </div>
+        <div class="iframe-container-one">
+          <iframe allow="fullscreen" allowfullscreen height="480" src="https://streamable.com/e/9kwpi7?" width="1280" style="border:none;"></iframe>
+        </div>
+      </div>
+      <div class="item item-compare2">
+        <div class="section-title">
+        </div>
+        <div class="iframe-container-one">
+          <iframe allow="fullscreen" allowfullscreen height="480" src="https://streamable.com/e/c2s1bj?" width="1280" style="border:none;"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <p>&nbsp;&nbsp;&nbsp;</p>
+    <h3 class="title is-4">Part3. Effectiveness of IC-Init.</h3>
+    <p>IC-Init can be applied to other diffusion-based talking head generation methods as a plug-and-play noise initialization strategy. Below are some comparisons between <b>vanilla Hallo</b> and <b>Hallo using IC-Init</b>.</p>
   </div>
 </section>
 
