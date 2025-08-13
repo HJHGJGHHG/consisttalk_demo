@@ -111,13 +111,13 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">ConsistTalk: Intensity Controllable Temporal Consistent Talking Head Generation with Diffusion Noise Search</h1>
+          <h1 class="title is-1 publication-title">ConsistTalk: Intensity Controllable Temporally Consistent Talking Head Generation with Diffusion Noise Search</h1>
 
           <div class="is-size-3 publication-authors">
             <span class="author-block"> </span>
             <span class="author-block"> 
               <h2 class="subtitle has-text-centered" style="font-size: 2.4rem; color: #29d4d2">
-              ACM MM 2025 Submission #6540 </span>
+              AAAI 2026 Submission #25845 </span>
             </h2>
           </div>
 
@@ -136,7 +136,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            The emergence of diffusion-based video generation has recently led to significant advancements in audio-driven portrait image animation. However, due to the insufficient decoupling of motion and identity information, current methods exhibit significant limitations in background stabilization and flicker mitigation. In addition, existing approaches lack joint modeling of audio and portrait motion, and control of motion intensity is either inflexible or results in severe temporal inconsistencies. To address these problems, we propose <b>ConsistTalk</b>, a diffusion-based approach specialized in improving the visual consistency in generating talking heads with controllable intensity. Specifically, we introduce <b>an optical flow-guided temporal module (OFT)</b> that incorporates facial optical flow and a 3D full-attention-based model to enhance temporal consistency. Second, we present an <b>Audio-to-Intensity (A2I) model</b> obtained through multimodal teacher-student knowledge distillation. The A2I model converts audio and facial velocity features into a frame-wise intensity sequence, representing the overall strength of head and expression movements. Finally, we introduce <b>a plug-and-play, training-free noise initialization strategy (IC-Init)</b> that leverages inference-time noise searching based on frequency decomposition, with the stop frequency adaptively parameterized by the acquired intensity sequence. These methods enable ConsistTalk to generate temporal consistent talking head videos with the ability to adjust portrait movement diversity by manipulating the acquired intensity scores. Extensive experiments indicate that ConsistTalk outperforms recent models, demonstrates the ability to maintain background stabilization and mitigate flicker, and provides more lifelike and high-quality results.
+            Recent advancements in video diffusion models have significantly enhanced audio-driven portrait animation. However, current methods still suffer from flickering, identity drift, and poor audio-visual synchronization. These issues primarily stem from entangled appearance-motion representations and unstable inference strategies. In this paper, we introduce <b>ConsistTalk</b>, a novel intensity-controllable and temporally consistent talking head generation framework with diffusion noise search inference. First, we propose an <b>optical flow-guided temporal module (OFT)</b> that decouples motion features from static appearance by leveraging facial optical flow, thereby reducing visual flicker and improving temporal consistency. Second, we present an <b>Audio-to-Intensity (A2I)</b> model obtained through multimodal teacher-student knowledge distillation. By transforming audio and facial velocity features into a frame-wise intensity sequence, the A2I model enables joint modeling of audio and visual motion, resulting in more natural dynamics. This further enables fine-grained, frame-wise control of motion dynamics while maintaining tight audio-visual synchronization. Third, we introduce a <b>diffusion noise initialization strategy (IC-Init)</b>. By enforcing explicit constraints on background coherence and motion continuity during inference-time noise search, we achieve better identity preservation and refine motion dynamics compared to the current autoregressive strategy. Extensive experiments demonstrate that ConsistTalk significantly outperforms prior methods in reducing flicker, preserving identity, and delivering temporally stable, high-fidelity talking head videos.
           </p>
         </div>
       </div>
@@ -215,7 +215,7 @@ We select the top \(B\) candidate pairs by the reward function \(R(\cdot)\), the
             <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/6jt5n2?" width="512" style="border:none;"></iframe>
             <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/pn9gk0?" width="512" style="border:none;"></iframe>
             <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/nc28cv?" width="512" style="border:none;"></iframe>
-            <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/dcyrp9?" width="512" style="border:none;"></iframe>
+            <iframe allow="fullscreen" allowfullscreen height="512" src="https://streamable.com/e/k0r7t6?" width="512" style="border:none;"></iframe>
          </div>
         </div>
         </div>
